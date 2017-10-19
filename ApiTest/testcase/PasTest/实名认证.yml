@@ -1,0 +1,58 @@
+- config:
+    name: "PAS接口基本参数"
+    variable_binds:
+        - url: http://10.65.209.29:8065/pas/gateway.do
+        - service: validate_identity
+        - version: PAS_1.0
+        - request_time: ${get_now_time()}
+        - partner_id: 200003670082
+        - _input_charset: UTF-8
+        - sign_type: RSA
+        - sign_version: 1.0
+        - encrypt_version: 1.0
+        - notify_url: http://www.baidu.com
+        - return_url: http://www.baidu.com
+
+- test:
+    name: "实名认证"
+    variable_binds:
+        - cert_type: IC
+    request:
+        url: $url
+        method: POST
+        basic_data:
+            - service: $service
+            - version: $version
+            - request_time: $request_time
+            - partner_id: $partner_id
+            - _input_charset: $_input_charset
+            - sign_type: $sign_type
+            - sign_version: $sign_version
+            - encrypt_version: $encrypt_version
+            - notify_url: $notify_url
+            - return_url: $return_url
+        unique_data:
+            - cert_type: $cert_type
+            - out_request_no: $request_time
+        encrypt_data:
+            - real_name: 尹全旺
+            - cert_no: 43042319941103625x
+        sleep: 1
+    extract_binds:
+        - response_time: response_time
+    validators:
+        - {"check": "response_message", "comparator": "eq", "expected": "验证正确"}
+        - {"check": "response_code", "comparator": "eq", "expected": "VALIDATE_TRUE"}
+
+
+
+
+
+
+
+
+
+
+
+
+

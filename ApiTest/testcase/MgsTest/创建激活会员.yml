@@ -1,0 +1,87 @@
+- config:
+    name: "MGS接口基本参数"
+    variable_binds:
+        - url: http://10.65.209.24:8083/mgs/gateway.do
+        - service: create_activate_member
+        - version: 1.0
+        - request_time: ${get_now_time()}
+        - partner_id: 200003670082
+        - _input_charset: UTF-8
+        - sign_type: RSA
+        - sign_version: 1.0
+        - encrypt_version: 1.0
+        - notify_url: http://www.baidu.com
+        - return_url: http://www.baidu.com
+        - client_ip: 1.1.1.1
+
+- test:
+    name: "创建激活会员成功2"
+    variable_binds:
+        - identity_id: $request_time
+        - identity_type: UID
+    request:
+        url: $url
+        method: POST
+        basic_data:
+            - service: $service
+            - version: $version
+            - request_time: $request_time
+            - partner_id: $partner_id
+            - _input_charset: $_input_charset
+            - sign_type: $sign_type
+            - sign_version: $sign_version
+            - encrypt_version: $encrypt_version
+            - notify_url: $notify_url
+            - return_url: $return_url
+            - client_ip: 1.1.1.1
+        unique_data:
+            - identity_id: $identity_id
+            - identity_type: $identity_type
+    extract_binds:
+        - response_time: response_time
+    validators:
+        - {"check": "response_message", "comparator": "eq", "expected": "提交成功"}
+        - {"check": "response_code", "comparator": "eq", "expected": "APPLY_SUCCESS"}
+
+
+- test:
+    name: "创建激活会员-UID重复"
+    variable_binds:
+        - identity_type: UID
+    request:
+        url: $url
+        method: POST
+        basic_data:
+            - service: $service
+            - version: $version
+            - request_time: $response_time
+            - partner_id: $partner_id
+            - _input_charset: $_input_charset
+            - sign_type: $sign_type
+            - sign_version: $sign_version
+            - encrypt_version: $encrypt_version
+            - notify_url: $notify_url
+            - return_url: $return_url
+            - client_ip: 1.1.1.1
+        unique_data:
+            - identity_id: $request_time
+            - identity_type: $identity_type
+    extract_binds:
+        - response_time: response_time
+    validators:
+        - {"check": "response_message", "comparator": "eq", "expected": "用户标识息重复"}
+        - {"check": "response_code", "comparator": "eq", "expected": "DUPLICATE_IDENTITY_ID"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
