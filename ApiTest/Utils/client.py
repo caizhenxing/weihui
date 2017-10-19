@@ -116,7 +116,7 @@ def request(method, url, **kwargs):
     # prepend url with hostname unless it's already an absolute URL
 
     # logging.info(" Start to {method} {url}".format(method=method, url=url))
-    logging.info(" request_msg: "+str(kwargs))
+    logging.info(" request_data: "+str(kwargs))
 
     # store meta data that is used when reporting the request to locust's statistics
     request_meta = {}
@@ -151,7 +151,7 @@ def request(method, url, **kwargs):
     request_meta["response_headers"] = response.headers
     request_meta["response_content"] = response.content
     request_meta["response_msg"] = decode(response.text)
-    logging.info(" response: "+request_meta["response_msg"])
+    logging.info(" response_data: "+request_meta["response_msg"])
     logging.info("\n")
     try:
         response.raise_for_status()

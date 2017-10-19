@@ -39,7 +39,7 @@ class Runner(object):
         parsed_request = self.context.get_parsed_request()
 
         try:
-            logging.info("Start run test " + parsed_request.pop('name'))
+            logging.info(" start run test " + parsed_request.pop('name'))
             url = parsed_request.pop('url')
             method = parsed_request.pop('method')
         except KeyError:
