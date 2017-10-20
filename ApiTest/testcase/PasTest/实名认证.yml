@@ -35,8 +35,8 @@
             - cert_type: $cert_type
             - out_request_no: $request_time
         encrypt_data:
-            - real_name: 尹全旺
-            - cert_no: 43042319941103625x
+            - real_name: 理发
+            - cert_no: 120101199901017134
         sleep: 1
     extract_binds:
         - response_time: response_time
