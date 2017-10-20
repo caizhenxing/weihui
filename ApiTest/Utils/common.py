@@ -3,7 +3,7 @@ import string
 
 import time
 
-from Utils.config import jvmArg, jvmPath, private_key, encrypt_key
+from Utils.config import jvmArg, jvmPath, private_key, encrypt_key, db_jvm_arg
 from Utils.exception import ParamsError
 import jpype
 '''
@@ -90,7 +90,29 @@ def get_request_msg(case_data):
     sign_string['sign'] = sign
     return sign_string
 
+'''查询数据库,默认连接fun reader账号，也可自己指定'''
+def get_db_field(*args):
+    if not jpype.isJVMStarted():
+        jpype.startJVM(jvmPath, db_jvm_arg)
+    if len(args) == 2:
+        host = "10.65.193.11:1521"
+        db = "whpay"
+        name = "READER"
+        pwd = "tF1P7IC7oKa6ua"
+        sql = args[0]
+        field = args[1]
+    else:
+        host = args[0]
+        db = args[1]
+        name = args[2]
+        pwd = args[3]
+        sql = args[4]
+        field = args[5]
 
+    DBOpt = jpype.JClass('com.common.DBOpt')
+    dbopt = DBOpt()
+    value = dbopt.getDBField(host, db, name, pwd, sql, field)
+    return value
 
 
 '''RSA加签'''
@@ -126,4 +148,7 @@ def encode(text):
         jpype.startJVM(jvmPath, jvmArg)
     text = jpype.java.net.URLEncoder.encode(text, "UTF-8");
     return text
+
+value = get_db_field("SELECT * FROM MEMBERUSER.TM_MEMBER_IDENTITY where identity = '0912170632'", "STATUS")
+print(value)
 
